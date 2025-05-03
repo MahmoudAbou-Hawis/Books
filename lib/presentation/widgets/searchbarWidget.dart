@@ -50,20 +50,20 @@ class Searchbarwidget extends StatelessWidget {
         }
       }
     });
+
     return SearchBar(
-      hintText: "search",
+      hintText: "Search",
       controller: controller,
       constraints: BoxConstraints(
-        maxWidth: MediaQuery.of(context).size.width / 1.1,
-        minHeight: MediaQuery.of(context).size.height / 12,
-
+        maxWidth: MediaQuery.of(context).size.width * 0.9,
+        minWidth: MediaQuery.of(context).size.width * 0.9,
+        minHeight: 50
       ),
       onTap: () {
         controller.openView();
       },
       onChanged: (value) {
         FocusScope.of(context).unfocus();
-
         controller.openView();
       },
       onTapOutside: (event) => FocusScope.of(context).unfocus(),
@@ -91,12 +91,12 @@ class Searchbarwidget extends StatelessWidget {
 
   Searchbarwidget({super.key, required this.Books, required this.onSubmit}) {
     for (final book in Books) {
-      if(!items.contains(book.author))
-      {
+      if (!items.contains(book.author)) {
         items.add(book.author);
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -104,10 +104,9 @@ class Searchbarwidget extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: (screenWidth - screenWidth / 1.1) / 2,
+        horizontal: screenWidth * 0.05,
         vertical: screenHeight * 0.02,
       ),
-
       child: SearchAnchor(
         viewOnSubmitted: (value) {
           _gController.closeView(value);
