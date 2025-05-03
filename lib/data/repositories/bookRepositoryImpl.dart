@@ -24,11 +24,7 @@ class Bookrepositoryimpl extends BookRepositiory {
   Future<List<Book>> _getBufferedBooks() async {
     List<Book> list = [];
     int len = _currentList.length;
-    for (
-      int _current = 0;
-      _current < min(10, len);
-      _current++
-    ) {
+    for (int _current = 0; _current < min(10, len); _current++) {
       list.add(_currentList[_currentList.length - 1]);
       _currentList.removeLast();
     }
@@ -84,10 +80,22 @@ class Bookrepositoryimpl extends BookRepositiory {
       }
     } else {
       List<Book> filtered = [];
+
       for (final book in books) {
         if (book.author.contains(name) || book.title.contains(name)) {
           filtered.add(book);
         }
+      }
+      int cnt = 0;
+      for (int i = 0; i < filtered.length; i++) {
+        if (filtered[i].author == books[i].author &&
+            filtered[i].title == books[i].title &&
+            filtered[i].summary == books[i].summary) {
+          cnt++;
+        }
+      }
+      if (cnt == books.length) {
+        return Left(NoSearchMore());
       }
       if (filtered.isEmpty) {
         return Left(NotFoundFailure());

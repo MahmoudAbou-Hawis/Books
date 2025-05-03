@@ -35,20 +35,20 @@ class Searchbarwidget extends StatelessWidget {
   SearchBar _searchBar(SearchController controller, BuildContext context) {
     _gController = controller;
     controller.addListener(() {
-    _filterSearch(controller.text);
-
-final text = controller.text;
-if (text.isEmpty) return;
-
-if (_filteredList.isEmpty) {
-  _filteredList.add(text);
-} else {
-  final last = _filteredList.last;
-  if (last != text) {
-    _filteredList[_filteredList.length - 1] = text;
-  }
-}
-
+      _filterSearch(controller.text);
+      if (_filteredList.isNotEmpty &&
+          _filteredList.last.substring(0, _filteredList.length - 1) !=
+              controller.text) {
+        _filteredList.add(controller.text);
+      } else {
+        if (_filteredList.isNotEmpty) {
+          _filteredList[_filteredList.length - 1] = controller.text;
+        } else {
+          if (controller.text.isNotEmpty) {
+            _filteredList.add(controller.text);
+          }
+        }
+      }
     });
     return SearchBar(
       hintText: "search",
