@@ -11,9 +11,8 @@ class BookPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold( body: _buildBody());
+    return Scaffold(body: _buildBody());
   }
-
 
   Widget _buildBody() {
     return SafeArea(
@@ -26,32 +25,29 @@ class BookPage extends StatelessWidget {
               state is GettingMoreSearchingBooksState ||
               state is ErrorSearchingBookState) {
             if (state is ErrorSearchingBookState) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
-            });
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(state.message)));
+              });
             }
             if (state is ErrorGettingMoreBooksState) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
-            });
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(state.message)));
+              });
             }
-            if(state is GettingMoreBooksState || state is GettingMoreSearchingBooksState )
-            {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Loading...')),
-              );
-            });
-            }
+            if (state is GettingMoreBooksState ||
+                state is GettingMoreSearchingBooksState) {}
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Searchbarwidget(
-                  Books: (state is SearchingState )?state.searchedList: state.Books,
+                  Books:
+                      (state is SearchingState)
+                          ? state.searchedList
+                          : state.Books,
                   onSubmit: (query) {
                     context.read<BookCubit>().searchForaBook(query);
                   },
@@ -60,10 +56,18 @@ class BookPage extends StatelessWidget {
                   child: BookListsWidget(
                     Books: state.Books,
                     scroll: () {
-                      if (state is SearchingState || state is GettingMoreSearchingBooksState || state is ErrorSearchingBookState) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (ScaffoldMessenger.of(context).mounted) {
+                          ScaffoldMessenger.of(
+                            context,
+                          ).showSnackBar(SnackBar(content: Text('Loading...')));
+                        }
+                      });
+                      if (state is SearchingState ||
+                          state is GettingMoreSearchingBooksState ||
+                          state is ErrorSearchingBookState) {
                         context.read<BookCubit>().LoadMoreSearchBooks('');
-                      }
-                    else {
+                      } else {
                         context.read<BookCubit>().getMoreBooks();
                       }
                     },
